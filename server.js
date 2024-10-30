@@ -33,21 +33,38 @@ app.get('/rooms', (req, res) => {
   res.json(rooms); // Gửi danh sách phòng
 });
 
+// io.on('connection', (socket) => {
+//   console.log('A user connected');
+
+//   socket.on('joinRoom', (room) => {
+//     if (rooms.includes(room)) {
+//       socket.join(room);
+//       console.log(`User joined room: ${room}`);
+//       socket.emit('message', `Welcome to ${room}!`);
+//     } else {
+//       socket.emit('message', 'Room not found!');
+//     }
+//   });
+
+//   socket.on('message', (msg) => {
+//     io.to(msg.room).emit('message', msg.text);
+//   });
+
+//   socket.on('disconnect', () => {
+//     console.log('A user disconnected');
+//   });
+// });
+
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  socket.on('joinRoom', (room) => {
-    if (rooms.includes(room)) {
-      socket.join(room);
-      console.log(`User joined room: ${room}`);
-      socket.emit('message', `Welcome to ${room}!`);
-    } else {
-      socket.emit('message', 'Room not found!');
-    }
+  socket.on('join_room', (room) => {
+    socket.join(room);
+    console.log(`User joined room: ${room}`);
   });
 
-  socket.on('message', (msg) => {
-    io.to(msg.room).emit('message', msg.text);
+  socket.on('send_message', (data) => {
+    io.to(data.room).emit('receive_message', data);
   });
 
   socket.on('disconnect', () => {

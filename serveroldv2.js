@@ -5,15 +5,6 @@ const { Server } = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 
-// Cấu hình CORS cho Socket.io
-// const io = new Server(server, {
-//     cors: {
-//       origin: ['http://localhost:3000', 'https://chat-client-topaz-two.vercel.app'], // Cho phép cả localhost và Vercel
-//       methods: ['GET', 'POST'],
-//       allowedHeaders: ['my-custom-header'],
-//       credentials: true,
-//     },
-//   });
 const io = new Server(server, {
     cors: {
         // origin: '*', // Chỉ cho phát triển
@@ -32,28 +23,6 @@ app.get('/', (req, res) => {
 app.get('/rooms', (req, res) => {
   res.json(rooms); // Gửi danh sách phòng
 });
-
-// io.on('connection', (socket) => {
-//   console.log('A user connected');
-
-//   socket.on('joinRoom', (room) => {
-//     if (rooms.includes(room)) {
-//       socket.join(room);
-//       console.log(`User joined room: ${room}`);
-//       socket.emit('message', `Welcome to ${room}!`);
-//     } else {
-//       socket.emit('message', 'Room not found!');
-//     }
-//   });
-
-//   socket.on('message', (msg) => {
-//     io.to(msg.room).emit('message', msg.text);
-//   });
-
-//   socket.on('disconnect', () => {
-//     console.log('A user disconnected');
-//   });
-// });
 
 io.on('connection', (socket) => {
   console.log('A user connected');

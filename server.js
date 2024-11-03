@@ -1,23 +1,31 @@
 // server.js
 const express = require('express');
 const http = require('http');
-const socketIo = require('socket.io');
+// const socketIo = require('socket.io');
 const multer = require('multer');
-const cors = require('cors');
+// const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+// const io = socketIo(server);
 const PORT = process.env.PORT || 3001;
 
 // Cấu hình CORS
-app.use(cors({
-    origin: '*', // Chỉ cho phát triển
-    methods: ['GET', 'POST'],
-    credentials: true,
-}));
+// app.use(cors({
+//       origin: '*', // Chỉ cho phát triển
+//         methods: ['GET', 'POST'],
+//         credentials: true,
+// }));
+const io = new Server(server, {
+  cors: {
+      origin: '*', // Chỉ cho phát triển
+      methods: ['GET', 'POST'],
+      credentials: true,
+    },
+});
 
 // Cấu hình multer để xử lý upload file
 const storage = multer.diskStorage({
@@ -79,5 +87,5 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 // Khởi động server
 server.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
